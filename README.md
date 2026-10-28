@@ -5,6 +5,12 @@ join from their phones, and the tokens slide by themselves, pulled by magnets on
 One laptop next to the board runs everything: the game server, the motors, the overhead camera, and the
 "Magic Mirror" that narrates out loud.
 
+> **About this copy.** This is a copy of our HackTX 2026 team repo, [avishparekh06/magic-monopoly](https://github.com/avishparekh06/magic-monopoly), built with Avish Parekh, Nihal Neerukonda, and Shivanshi Das. Project page with screenshots: https://muppt11.github.io/magic-monopoly/
+>
+> **My part:** the interface. I designed the fairy tale theme and built the board, lobby, and session pages, including pairing the 2D map with the 3D token view.
+>
+> **Challenge I worked through:** the board laptop shows two views of the same game, a flat map and a 3D world. Keeping them in agreement as tokens moved, without either view running its own copy of the game state, meant both had to read from the server's state and only animate what it reported.
+
 ## What's in this repo
 
 | Folder | What it is | Owner |
