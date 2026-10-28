@@ -60,6 +60,12 @@
     .card p { margin: 0; color: var(--ink-soft); font-size: 17px; }
     .card .icon { margin-bottom: 10px; color: var(--gold-deep); font-size: 26px; line-height: 1; }
 
+    .views { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); gap: 20px; align-items: start; }
+    .views figure { margin: 0; }
+    .views img { width: 100%; border: 3px solid #6b4a2a; border-radius: 8px; box-shadow: 0 10px 28px rgba(14, 24, 56, .22); }
+    .views figcaption { margin-top: 10px; color: var(--ink-soft); font-size: 16px; }
+    .views figcaption strong { display: block; color: var(--ink); font: 700 15px "Cinzel", serif; }
+    @media (max-width: 720px) { .views { grid-template-columns: 1fr; } }
     .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 12px; }
     .gallery figure { margin: 0; padding: 10px; border: 1px solid #e0c891; border-radius: 6px; background: #fff9ec; }
     .gallery img { width: 100%; aspect-ratio: 1; object-fit: contain; }
@@ -110,6 +116,17 @@
           <p>We wanted remote family members to feel present through something they do together. Grandma keeps the real board, real dice, and printed cards. Everyone else joins from a link on their phone, and every move lands on the same physical board.</p>
         </div>
         <blockquote class="quote">From “Hi, bye” to “One more round?”<small>The feeling we designed for</small></blockquote>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <h2>See it in action</h2>
+        <p class="lede">The board laptop switches between a flat storybook map and a 3D world that follows whoever’s turn it is.</p>
+        <div class="views">
+          <figure><img src="assets/board-2d.jpg" alt="The 2D storybook map of the full Magic Mirror Monopoly board" loading="lazy" /><figcaption><strong>2D view</strong>The full board at a glance, with every property, price, and player token.</figcaption></figure>
+          <figure><img src="assets/board-3d.jpg" alt="The 3D view of the board with a wizard hat token on Once Upon a Time and a fairy tale village in the center" loading="lazy" /><figcaption><strong>3D view</strong>A miniature fairy tale world. The camera follows the active token as it walks the board.</figcaption></figure>
+        </div>
       </div>
     </section>
 
