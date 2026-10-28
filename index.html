@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Magic Mirror Monopoly</title>
+  <meta name="description" content="A fairy tale Monopoly board with moving tokens, a narrating Magic Mirror, and remote players on their phones. Built at HackTX 2026." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --night: #0e1838;
+      --night-2: #18264f;
+      --parchment: #f6ead0;
+      --parchment-2: #ecdab3;
+      --ink: #2b2140;
+      --ink-soft: #5a4c6b;
+      --gold: #e2b04a;
+      --gold-deep: #b07d22;
+      --rose: #c8667a;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; color: var(--ink); background: var(--parchment); font: 18px/1.6 "EB Garamond", Georgia, serif; }
+    a { color: inherit; }
+    img { max-width: 100%; display: block; }
+    .wrap { width: min(1040px, calc(100% - 32px)); margin: 0 auto; }
+
+    header {
+      position: relative; overflow: hidden; padding: 72px 0 88px; color: var(--parchment); text-align: center;
+      background: radial-gradient(ellipse at 50% 120%, #2c3c74 0%, var(--night-2) 45%, var(--night) 100%);
+    }
+    header::before {
+      position: absolute; inset: 0; content: ""; opacity: .55; pointer-events: none;
+      background-image: radial-gradient(1.5px 1.5px at 12% 22%, #fff 50%, transparent 51%), radial-gradient(1px 1px at 28% 68%, #fff 50%, transparent 51%), radial-gradient(1.5px 1.5px at 46% 14%, #fff 50%, transparent 51%), radial-gradient(1px 1px at 63% 44%, #fff 50%, transparent 51%), radial-gradient(1.5px 1.5px at 78% 18%, #fff 50%, transparent 51%), radial-gradient(1px 1px at 88% 62%, #fff 50%, transparent 51%), radial-gradient(1px 1px at 6% 80%, #fff 50%, transparent 51%), radial-gradient(1.5px 1.5px at 94% 86%, #fff 50%, transparent 51%);
+    }
+    .eyebrow { margin: 0 0 18px; color: var(--gold); font: 600 13px "Cinzel", serif; letter-spacing: .22em; text-transform: uppercase; }
+    .logo { width: min(620px, 100%); margin: 0 auto 22px; filter: drop-shadow(0 6px 18px rgba(0, 0, 0, .45)); }
+    .tagline { max-width: 640px; margin: 0 auto 30px; font-size: 22px; font-style: italic; line-height: 1.45; }
+    .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+    .btn { display: inline-block; padding: 11px 20px; border: 2px solid var(--gold); border-radius: 6px; font: 600 14px "Cinzel", serif; letter-spacing: .06em; text-decoration: none; transition: transform 150ms ease, background 150ms ease; }
+    .btn:hover, .btn:focus-visible { transform: translateY(-2px); }
+    .btn-gold { color: var(--night); background: var(--gold); }
+    .btn-ghost { color: var(--parchment); background: transparent; }
+    .btn-ghost:hover, .btn-ghost:focus-visible { background: rgba(226, 176, 74, .14); }
+
+    section { padding: 64px 0; }
+    section + section { border-top: 1px solid var(--parchment-2); }
+    h2 { margin: 0 0 8px; color: var(--ink); font: 700 clamp(26px, 4vw, 34px) "Cinzel", serif; }
+    .lede { max-width: 700px; margin: 0 0 32px; color: var(--ink-soft); }
+
+    .story { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+    .quote { margin: 0; padding: 22px 26px; border-left: 4px solid var(--gold); background: #fbf3e0; font-size: 21px; font-style: italic; }
+    .quote small { display: block; margin-top: 8px; color: var(--ink-soft); font-size: 15px; font-style: normal; }
+
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; }
+    .card { padding: 22px; border: 1px solid #e0c891; border-radius: 8px; background: #fbf3e0; box-shadow: 0 3px 0 #e8d6aa; }
+    .card h3 { margin: 0 0 6px; font: 700 17px "Cinzel", serif; }
+    .card p { margin: 0; color: var(--ink-soft); font-size: 17px; }
+    .card .icon { margin-bottom: 10px; color: var(--gold-deep); font-size: 26px; line-height: 1; }
+
+    .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 12px; }
+    .gallery figure { margin: 0; padding: 10px; border: 1px solid #e0c891; border-radius: 6px; background: #fff9ec; }
+    .gallery img { width: 100%; aspect-ratio: 1; object-fit: contain; }
+
+    .stack { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+    .stack li { padding: 6px 12px; border: 1px solid var(--gold-deep); border-radius: 999px; color: var(--ink); background: #fbf3e0; font-size: 16px; }
+
+    .team { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+    .member { padding: 16px 18px; border-radius: 8px; background: var(--night); color: var(--parchment); }
+    .member strong { display: block; color: var(--gold); font: 700 15px "Cinzel", serif; }
+    .member span { font-size: 16px; opacity: .9; }
+
+    .run { padding: 22px 24px; border-radius: 8px; color: var(--parchment); background: var(--night); }
+    .run p { margin: 0 0 12px; }
+    .run pre { margin: 0; padding: 14px 16px; overflow-x: auto; border-radius: 6px; background: #070e24; color: #f3d690; font: 14px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace; }
+
+    footer { padding: 36px 0 48px; color: var(--ink-soft); font-size: 15px; text-align: center; }
+
+    @media (max-width: 720px) {
+      header { padding: 52px 0 64px; }
+      .tagline { font-size: 19px; }
+      .story { grid-template-columns: 1fr; }
+      section { padding: 48px 0; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .btn { transition: none; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <p class="eyebrow">HackTX 2026</p>
+      <img class="logo" src="assets/monopoly-logo.png" alt="Magic Mirror Monopoly" />
+      <p class="tagline">A fairy tale Monopoly board where family members far away can play along from their phones, the tokens move on their own, and a Magic Mirror tells the story out loud.</p>
+      <div class="actions">
+        <a class="btn btn-gold" href="#run">Play it yourself</a>
+        <a class="btn btn-ghost" href="https://github.com/muppt11/magic-monopoly">View the code</a>
+        <a class="btn btn-ghost" href="assets/pitch-deck.pdf" target="_blank" rel="noreferrer">See the pitch deck</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section>
+      <div class="wrap story">
+        <div>
+          <h2>Why we built it</h2>
+          <p>Picture a grandmother whose family lives far away. The phone rings, everyone says hi, catches up for a minute, and says bye. The call worked, but she still missed spending an evening with them.</p>
+          <p>We wanted remote family members to feel present through something they do together. Grandma keeps the real board, real dice, and printed cards. Everyone else joins from a link on their phone, and every move lands on the same physical board.</p>
+        </div>
+        <blockquote class="quote">From “Hi, bye” to “One more round?”<small>The feeling we designed for</small></blockquote>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <h2>How it works</h2>
+        <p class="lede">One laptop beside the board runs the game server, the motors, the overhead camera, and the narrator.</p>
+        <div class="cards">
+          <article class="card"><div class="icon" aria-hidden="true">♜</div><h3>Moving tokens</h3><p>Magnets on motorized GT2 belts under the board slide each token to its square, driven by an Arduino with stepper motors.</p></article>
+          <article class="card"><div class="icon" aria-hidden="true">⚄</div><h3>Real dice and cards</h3><p>An overhead camera reads the dice once they settle and matches ArUco markers on printed cards to the right card action.</p></article>
+          <article class="card"><div class="icon" aria-hidden="true">✦</div><h3>The Magic Mirror</h3><p>Narrates every turn in fairy tale style and listens for spoken choices like “I’ll take it” when you land on a property.</p></article>
+          <article class="card"><div class="icon" aria-hidden="true">☎</div><h3>Remote players</h3><p>Family members scan a QR code or open a link to join. Their moves reach the same game and the physical board in real time.</p></article>
+          <article class="card"><div class="icon" aria-hidden="true">⚖</div><h3>A fair rules engine</h3><p>The engine tracks turns, money, rent, cards, and bankruptcy. Voice is only an input, so the Mirror can never waive rent or skip a turn.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <h2>The board</h2>
+        <p class="lede">Every property is a storybook location, from the Gingerbread House to Rapunzel’s Tower.</p>
+        <div class="gallery">
+          <figure><img src="assets/1.svg" alt="Property art" loading="lazy" /></figure>
+          <figure><img src="assets/6.svg" alt="Property art" loading="lazy" /></figure>
+          <figure><img src="assets/11.svg" alt="Property art" loading="lazy" /></figure>
+          <figure><img src="assets/16.svg" alt="Property art" loading="lazy" /></figure>
+          <figure><img src="assets/board-center-tower.svg" alt="Rapunzel's Tower at the center of the board" loading="lazy" /></figure>
+          <figure><img src="assets/21.svg" alt="Property art" loading="lazy" /></figure>
+          <figure><img src="assets/26.svg" alt="Property art" loading="lazy" /></figure>
+          <figure><img src="assets/31.svg" alt="Property art" loading="lazy" /></figure>
+          <figure><img src="assets/37.svg" alt="Property art" loading="lazy" /></figure>
+          <figure><img src="assets/cinderella.svg" alt="Cinderella save badge" loading="lazy" /></figure>
+          <figure><img src="assets/peter-pan.svg" alt="Peter Pan save badge" loading="lazy" /></figure>
+          <figure><img src="assets/aladdin.svg" alt="Aladdin save badge" loading="lazy" /></figure>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <h2>Built with</h2>
+        <p class="lede">A Python game server talks to every screen, the camera, the motors, and the voice pipeline.</p>
+        <ul class="stack">
+          <li>Python</li><li>FastAPI</li><li>WebSockets</li><li>JavaScript</li><li>Three.js</li><li>SQLite</li><li>OpenCV and ArUco</li><li>Arduino</li><li>Meta Muse Spark</li><li>Muse Voice Transcribe</li><li>ElevenLabs</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <h2>The team</h2>
+        <p class="lede">Built in a weekend at HackTX 2026.</p>
+        <div class="team">
+          <div class="member"><strong>Tanvi Muppala</strong><span>Interface design, board and lobby pages, and the fairy tale theme</span></div>
+          <div class="member"><strong>Avish Parekh</strong><span>Game server, motor control, and demo mode</span></div>
+          <div class="member"><strong>Nihal Neerukonda</strong><span>Computer vision for dice and cards, and the board camera</span></div>
+          <div class="member"><strong>Shivanshi Das</strong><span>Voice decisions and in person and remote play</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="run">
+      <div class="wrap">
+        <h2>Play it yourself</h2>
+        <p class="lede">The game runs a live Python server, so it plays on your own computer. Simulation mode needs no board, motors, or camera.</p>
+        <div class="run">
+          <p>With Python 3.10 or newer installed, run these commands and open <strong>http://localhost:8000</strong> to create a game.</p>
+<pre>git clone https://github.com/muppt11/magic-monopoly.git
+cd magic-monopoly
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python -m server.main --sim</pre>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">Copied from the team repository at <a href="https://github.com/avishparekh06/magic-monopoly">avishparekh06/magic-monopoly</a>. Made with love at HackTX 2026.</div>
+  </footer>
+</body>
+</html>
